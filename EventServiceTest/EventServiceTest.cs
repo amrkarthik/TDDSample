@@ -7,6 +7,9 @@ using EventService;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using EventService.DataContracts;
+using System.IO.Compression;
+using System.Text;
+using System.Runtime.Serialization.Json;
 
 namespace EventServiceTest
 {
@@ -49,18 +52,18 @@ namespace EventServiceTest
             return content;
         }
 
-        [TestMethod]
-        public void ReadEventEndpointTest()
-        {
-            HttpClient client = new HttpClient
-            {
-                BaseAddress = new Uri("http://localhost:8733/EventService/"),
-            };
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = client.GetAsync("readevent/1").Result;
-            var result = response.Content.ReadAsStringAsync().Result;
-            Assert.AreEqual("\"You entered: 1\"", result);
-        }
+        //[TestMethod]
+        //public void ReadEventEndpointTest()
+        //{
+        //    HttpClient client = new HttpClient
+        //    {
+        //        BaseAddress = new Uri("http://localhost:8733/EventService/"),
+        //    };
+        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //    var response = client.GetAsync("readevent/1").Result;
+        //    var result = response.Content.ReadAsStringAsync().Result;
+        //    Assert.AreEqual("\"You entered: 1\"", result);
+        //}
 
         [TestMethod]
         public void ReadEventDetailsEndpointTest()
@@ -71,9 +74,13 @@ namespace EventServiceTest
             };
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.ExpectContinue = false;
-            var response = client.GetAsync("readeventdetails/1").Result; 
-            var result = response.Content.ReadAsStringAsync().Result;
-            Assert.AreEqual("\"You entered: 1\"", result);
+            var response = client.GetAsync("readeventdetails/1").Result;
+            string responsestring = response.Content.ReadAsStringAsync().Result;
+            MemoryStream s = new MemoryStream(Encoding.UTF8.GetBytes(responsestring));
+            DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(Event));
+            Event e = deserializer.ReadObject(s) as Event;
+            s.Close();
+            Assert.IsInstanceOfType(e, typeof(Event));
         }
 
         [TestMethod]
@@ -83,8 +90,8 @@ namespace EventServiceTest
             {
                 BaseAddress = new Uri("http://localhost:8733/EventService/"),
             };
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));            
-            var response = client.PutAsync("updateevent",GetHttpContent()).Result;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = client.PutAsync("updateevent", GetHttpContent()).Result;
         }
 
         [TestMethod]
@@ -97,7 +104,7 @@ namespace EventServiceTest
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var response = client.DeleteAsync("deleteevent").Result;
             var result = response.Content.ReadAsStringAsync().Result;
-            Assert.AreEqual(true, result);
+            Assert.AreEqual("true", result);
         }
 
         [TestMethod]
@@ -120,7 +127,6 @@ namespace EventServiceTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
         public void UpdateEventTest()
         {
             IEventService service = new EventService.EventService();
@@ -136,5 +142,7 @@ namespace EventServiceTest
             bool response = service.DeleteEvent(eventID);
             Assert.AreEqual(true, response);
         }
+
+
     }
 }

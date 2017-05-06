@@ -52,6 +52,7 @@
     <Compile Include="Operations\CreateEvent.cs" />
     <Compile Include="Operations\DeleteEvent.cs" />
     <Compile Include="Operations\ReadEvent.cs" />
+    <Compile Include="Operations\RegisterForEvent.cs" />
     <Compile Include="Operations\UpdateEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventService.cs" />

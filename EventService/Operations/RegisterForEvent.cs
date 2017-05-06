@@ -1,5 +1,4 @@
-﻿using EventService.DataContracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
@@ -11,13 +10,12 @@ namespace EventService
 {
     public partial class EventService
     {
-        private Event Read(int id)
+        private void register(string userID)
         {
-            using (DbConnection connection = EventData.DBConnection.GetConnection(ConfigurationManager.AppSettings["connString"]))
+            using (DbConnection connection = EventData.DBConnection.GetConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString))
             {
 
             }
-            return new Event();
         }
     }
 }

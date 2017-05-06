@@ -13,7 +13,7 @@ namespace EventService
     {
         private void update(Event e)
         {
-            using (DbConnection connection = EventData.DBConnection.GetConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString))
+            using (DbConnection connection = EventData.DBConnection.GetConnection(ConfigurationManager.AppSettings["connString"]))
             {
 
             }

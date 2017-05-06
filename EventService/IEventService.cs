@@ -1,4 +1,4 @@
-﻿using EventModel;
+﻿using EventService.DataContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,14 +33,14 @@ namespace EventService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/readevent/{eventID}")]
-        Event ReadEvent(string eventID);
+        string ReadEvent(string eventID);
 
         [OperationContract]
         [WebInvoke(RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json, Method = "PUT",
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/updateevent")]
-        void UpdateEvent(string eventID);
+        void UpdateEvent(Event e);
 
         [OperationContract]
         [WebInvoke(RequestFormat = WebMessageFormat.Json,
@@ -48,6 +48,19 @@ namespace EventService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/deleteevent")]
         bool DeleteEvent(string eventID);
+
+        [OperationContract]
+        [WebInvoke(RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json, Method = "POST",
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/registerforevent")]
+        bool RegisterForvent(string userID);
+
+        [OperationContract]
+        [WebGet(RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "/readeventdetails")]
+        Event ReadEventDetails(string userID);
     }
 
     // Use a data contract as illustrated in the sample below to add composite types to service operations.

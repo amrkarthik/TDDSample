@@ -8,6 +8,9 @@ namespace EventService
 {
     public partial class EventService
     {
-        
+        private bool delete(string eventID)
+        {
+            return false;
+        }
     }
 }

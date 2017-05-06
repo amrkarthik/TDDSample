@@ -59,7 +59,7 @@ namespace EventService
         [OperationContract]
         [WebGet(RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "/readeventdetails")]
+            UriTemplate = "/readeventdetails/{userID}")]
         Event ReadEventDetails(string userID);
     }
 
